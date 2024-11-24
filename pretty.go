@@ -103,4 +103,3 @@ func Pk(format string, a ...interface{}) string {
 func Pw(format string, a ...interface{}) string {
 	return fmt.Sprintf("\033[37m"+format+"\033[0m", a...)
 }
-
