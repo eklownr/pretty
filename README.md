@@ -1,5 +1,11 @@
 # pretty
-Pretty colors for the terminal.
+## Pretty colors for the terminal.
+
+### Install:
+```
+go get github.com/eklownr/pretty
+```
+
 ```go
 // replacement for fmt.Printf(string, multiple values). 
 func Pl(s string, value ...interface{}) string {
