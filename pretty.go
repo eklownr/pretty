@@ -6,30 +6,38 @@ import (
 	"strings"
 )
 
-// replace fmt.Printf(string, multiple values)
-// with colorized text
-func Pl(s string, value ...interface{}) string {
+// colorized text. Replace fmt.Printf(string, multiple values)
+func Pf(s string, value ...interface{}) string {
 	return Colorize(fmt.Sprintf(s+"\n", value...))
 }
 
-// colorize: text=Cyan, numbers=Green, special char and error=Red
-func Colorize(text string) string {
-	t := strings.Split(text, " ")
-	for i := range t {
-		// numbers t[i] = "\033[32m" + t[i] + "\033[0m"
-		if t[i] == "0" || regexp.MustCompile(`\d+`).MatchString(t[i]) || regexp.MustCompile(`\d+.`).MatchString(t[i]) {
-			t[i] = "\033[32m" + t[i] + "\033[0m"
-		}
-		// if 'error' or 'warning' or 'not a letter'
-		if t[i] == "error" || t[i] == "error." || t[i] == "warning" || regexp.MustCompile(`[^a-zA-Z+:+,+.+!+å+ä+ö+\n]`).MatchString(t[i]) {
-			t[i] = "\033[31m" + t[i] + "\033[0m"
-		}
-		// Cyan text
-		t[i] = "\033[36m" + t[i] + "\033[0m"
-	}
-	return strings.Join(t, " ")
+// Println with color. Use like fmt.Println
+func Pl(args ...interface{}) {
+	var arg string = fmt.Sprint(args...)
+	println(Colorize(arg))
 }
 
+// colorize: text=Cyan, numbers=Green, specialchar=Yellow and error=Red
+func Colorize(s string) string {
+	w := strings.Split(s, " ") // split s into words
+	for i := range w {
+		// numbers w[i] = "\033[32m" + w[i] + "\033[0m"
+		if regexp.MustCompile(`\d`).MatchString(w[i]) || regexp.MustCompile(`\d`).MatchString(w[i]) {
+			w[i] = "\033[32m" + w[i] + "\033[0m" // Green
+		}
+		// if 'Error!' or 'Warning!' red
+		if w[i] == "Error!" || w[i] == "Warning!" {
+			w[i] = "\033[31m" + w[i] + "\033[0m"
+		}
+		// Special char Yellow
+		if regexp.MustCompile(`[^a-zA-Z:,.!åäöÅÄÖ\n]`).MatchString(w[i]) {
+			w[i] = "\033[33m" + w[i] + "\033[0m"
+		}
+		// Cyan text
+		w[i] = "\033[36m" + w[i] + "\033[0m"
+	}
+	return strings.Join(w, " ")
+}
 // print one color for one string
 func PrintColor(text string, color string) {
 	switch color {
